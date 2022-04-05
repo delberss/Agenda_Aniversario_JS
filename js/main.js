@@ -37,12 +37,12 @@ function printCards(){
 
     for(var itemUser=0; itemUser < users.length; itemUser++){
         var elementJSON = users[itemUser];
-        var cardElement = createElementModal(elementJSON);
+        var cardElement = createCardElement(elementJSON);
         containerRegisters.appendChild(cardElement);
     }
 }
 
-function createElementModal(elementJSON){
+function createCardElement(elementJSON){
     var containerCards = document.createElement('div');
     containerCards.classList.add('col-md-4');
 
@@ -77,3 +77,9 @@ function createElementModal(elementJSON){
 
     return containerCards;
 }
+
+document.querySelector('#registerManager').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+      saveRegister();
+    }
+});
