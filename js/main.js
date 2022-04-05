@@ -1,5 +1,11 @@
 var users = [];
 
+document.querySelector('#registerManager').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+      saveRegister();
+    }
+});
+
 function saveRegister(){    
     var form = document.getElementById("form_user");
 
@@ -8,9 +14,41 @@ function saveRegister(){
     var date = form.date;
     var remember = form.remember.checked;
 
-    addJSONItem(name.value, url.value, date.value, remember);
-    hideModal();
-    printCards();
+    if(validation(name, url, date)){
+        addJSONItem(name.value, url.value, date.value, remember);
+        hideModal();
+        printCards();
+    }
+    
+}
+
+function validation(name, url, date){
+    var validForm = true;
+ 
+    if(name.value.length < 3){
+        validForm = false;
+        name.classList.add("error");
+    }
+
+    if(url.value.length == 0){
+        validForm = false;
+        url.classList.add("error");
+    }
+
+    if(date.value.length == 0 ){
+        validForm = false;
+        date.classList.add("error");
+    }
+
+    setTimeout(function(){
+        name.classList.remove("error");
+        url.classList.remove("error");
+        date.classList.remove("error");
+        
+    }, 2000)
+
+    return validForm;
+
 }
 
 function hideModal(){
@@ -32,8 +70,6 @@ function addJSONItem(name, url, date, remember){
 function printCards(){
     var containerRegisters = document.getElementById('containerRegisters');
     containerRegisters.innerHTML = '';
-
-    
 
     for(var itemUser=0; itemUser < users.length; itemUser++){
         var elementJSON = users[itemUser];
@@ -78,8 +114,3 @@ function createCardElement(elementJSON){
     return containerCards;
 }
 
-document.querySelector('#registerManager').addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
-      saveRegister();
-    }
-});
