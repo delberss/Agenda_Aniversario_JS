@@ -34,6 +34,7 @@ function saveRegister(){
     if(validation(name, date)){
         addJSONItem(name.value, url.value, date.value, remember);
         hideModal();
+        cleanForm();
         printCards();
         saveDataOnLocalStorage();
     }
@@ -162,3 +163,7 @@ function createCardElement(elementJSON, position){
     return containerCards;
 }
 
+function cleanForm(){
+    var form = document.getElementById('form_user');
+    form.reset();
+}
