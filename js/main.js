@@ -7,7 +7,6 @@ document.querySelector('#registerManager').addEventListener('keypress', function
     }
 });
 
-
 function getDataLocalStorage(){
 
     var dataSaved = localStorage.getItem('users_list');
@@ -39,6 +38,13 @@ function saveRegister(){
         saveDataOnLocalStorage();
     }
     
+}
+
+function removeCard(posicao){
+    users = getDataLocalStorage();
+    users.splice(posicao, 1);
+    saveDataOnLocalStorage();
+    printCards();
 }
 
 function validation(name, date){
@@ -108,12 +114,12 @@ function printCards(){
 
     for(var itemUser=0; itemUser < users.length; itemUser++){
         var elementJSON = users[itemUser];
-        var cardElement = createCardElement(elementJSON);
+        var cardElement = createCardElement(elementJSON, itemUser);
         containerRegisters.appendChild(cardElement);
     }
 }
 
-function createCardElement(elementJSON){
+function createCardElement(elementJSON, position){
     var containerCards = document.createElement('div');
     containerCards.classList.add('col-md-4');
 
@@ -139,12 +145,19 @@ function createCardElement(elementJSON){
     cardBirthday.classList.add('btn-primary');
     cardBirthday.innerHTML = elementJSON.date;
 
+    var cardDelete = document.createElement('a');
+    cardDelete.classList.add('btn');
+    cardDelete.classList.add('btn-danger');
+    cardDelete.innerHTML = "Excluir";
+    cardDelete.addEventListener('click', function(e){removeCard(position)})
+
 
     containerCards.appendChild(divCard);
     divCard.appendChild(imgCard);
     divCard.appendChild(divCardBody);
     divCardBody.appendChild(cardTitle);
     divCardBody.appendChild(cardBirthday);
+    divCardBody.appendChild(cardDelete);
 
     return containerCards;
 }
