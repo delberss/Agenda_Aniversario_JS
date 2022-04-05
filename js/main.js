@@ -1,10 +1,28 @@
-var users = [];
+var users = getDataLocalStorage();
+printCards();
 
 document.querySelector('#registerManager').addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
       saveRegister();
     }
 });
+
+
+function getDataLocalStorage(){
+
+    var dataSaved = localStorage.getItem('users_list');
+
+    if(dataSaved == null){
+        return [];
+    }
+    else{
+        return JSON.parse(localStorage.getItem('users_list'));
+    }
+}
+
+function saveDataOnLocalStorage(){
+    localStorage.setItem('users_list', JSON.stringify(users));
+}
 
 function saveRegister(){    
     var form = document.getElementById("form_user");
@@ -14,15 +32,16 @@ function saveRegister(){
     var date = form.date;
     var remember = form.remember.checked;
 
-    if(validation(name, url, date)){
+    if(validation(name, date)){
         addJSONItem(name.value, url.value, date.value, remember);
         hideModal();
         printCards();
+        saveDataOnLocalStorage();
     }
     
 }
 
-function validation(name, url, date){
+function validation(name, date){
     var validForm = true;
  
     if(name.value.length < 3){
@@ -30,10 +49,27 @@ function validation(name, url, date){
         name.classList.add("error");
     }
 
-    if(url.value.length == 0){
+
+    /*
+    VALIDAÇÃO URL
+
+    if(!validURL(url.value)) {
         validForm = false;
         url.classList.add("error");
     }
+
+    function validURL(url){
+        regexp =  /^(?:(?:https?):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
+        if (regexp.test(url))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    */
 
     if(date.value.length == 0 ){
         validForm = false;
@@ -42,7 +78,6 @@ function validation(name, url, date){
 
     setTimeout(function(){
         name.classList.remove("error");
-        url.classList.remove("error");
         date.classList.remove("error");
         
     }, 2000)
